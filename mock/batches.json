@@ -1,0 +1,30 @@
+[
+    {
+      "id": 1,
+      "name": "SWD June Weekday"
+    },
+    {
+      "id": 2,
+      "name": "SWD June Weekend"
+    },
+    {
+      "id": 3,
+      "name": "SWD Aug Weekday"
+    },
+    {
+      "id": 4,
+      "name": "SWD OCT Weekday"
+    },
+    {
+      "id": 5,
+      "name": "BUD NOV Weekday"
+    },
+    {
+      "id": 6,
+      "name": "BUD NOV Weekend"
+    },
+    {
+      "id": 7,
+      "name": "PUD NOV Weekday"
+    }
+  ]

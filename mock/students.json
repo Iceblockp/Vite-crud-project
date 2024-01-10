@@ -1,0 +1,30 @@
+[
+    {
+      "id": 1,
+      "name": "MG MG",
+      "phone": "09123356",
+      "batch": "SWD June Weekday",
+      "course": "SWD"
+    },
+    {
+      "id": 2,
+      "name": "Kyaw Kyaw",
+      "phone": "09123356",
+      "batch": "SWD June Weekday",
+      "course": "SWD"
+    },
+    {
+      "id": 3,
+      "name": "Su Su",
+      "phone": "09123356",
+      "batch": "SWD June Weekday",
+      "course": "SWD"
+    },
+    {
+      "id": 4,
+      "name": "Aye Aye",
+      "phone": "09123356",
+      "batch": "SWD June Weekday",
+      "course": "SWD"
+    }
+  ]
