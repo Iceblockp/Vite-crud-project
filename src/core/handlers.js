@@ -1,10 +1,10 @@
 import Swal from "sweetalert2";
-import { rowRender, rowUi, toast, url } from "./functions";
+import { confirmBox, editRow, removeRow, rowRender, rowUi, toast, url } from "./functions";
 import { courseEditForm, courseForm, editDrawer, rowGroup } from "./selectors";
 
 
 
-export const courseFormHandler = (event) => {
+export const courseFormHandler = async (event) => {
     event.preventDefault();
     const formData = new FormData(courseForm);
     const jsonData = JSON.stringify({
@@ -21,23 +21,35 @@ export const courseFormHandler = (event) => {
     courseForm.querySelector("button").toggleAttribute("disabled");
 
 
-    fetch(url("/courses"), {
+    // fetch(url("/courses"), {
+    //     method: "POST",
+    //     headers: myHeader,
+    //     body: jsonData,
+    // })
+    //     .then((res) => res.json())
+    //     .then((json) => {
+    //         courseForm.querySelector("button").toggleAttribute("disabled");
+
+    //         rowGroup.append(rowUi(json))
+    //         courseForm.reset();
+
+    //         toast("Course create successfully")
+    //     });
+
+    const res = await    fetch(url("/courses"), {
         method: "POST",
         headers: myHeader,
         body: jsonData,
-    })
-        .then((res) => res.json())
-        .then((json) => {
-            courseForm.querySelector("button").toggleAttribute("disabled");
+    });
 
-            rowGroup.append(rowUi(json))
+    const json = await res.json();
+
+    courseForm.querySelector("button").toggleAttribute("disabled");
+
+            rowGroup.append(rowUi(json));
             courseForm.reset();
 
-            toast("Course create successfully")
-        });
-
-
-
+            toast("Course create successfully");
 
 };
 
@@ -46,33 +58,7 @@ export const rowGroupHandler = (event) => {
         const currentRow = event.target.closest("tr");
         const currentRowId = currentRow.getAttribute("course-id")
 
-        Swal.fire({
-            title: "Are you sure?",
-            text: "You won't be able to revert this!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, delete it!"
-        }).then((result) => {
-            if (result.isConfirmed) {
-
-                event.target.toggleAttribute("disabled");
-
-
-                fetch(url("/courses/" + currentRowId), {
-                    method: "DELETE"
-                }).then((res) => {
-                    event.target.toggleAttribute("disabled");
-
-                    if (res.status === 204) {
-                        toast("Course Deleted")
-                        currentRow.remove();
-                    }
-                })
-
-            }
-        });
+        removeRow(currentRowId);
 
 
 
@@ -80,24 +66,7 @@ export const rowGroupHandler = (event) => {
 
     }
     else if (event.target.classList.contains("row-edit")) {
-        const currentRow = event.target.closest("tr");
-        const currentRowId = currentRow.getAttribute("course-id");
-        // 1old value retrieve 
-        event.target.toggleAttribute("disabled");
-
-        fetch(url("/courses/" + currentRowId)).then(res => res.json()).then(json => {
-            event.target.toggleAttribute("disabled");
-
-
-            courseEditForm.querySelector("#edit_course_title").value = json.title
-            courseEditForm.querySelector("#edit_course_id").value = json.id
-            courseEditForm.querySelector("#edit_short_name").value = json.short_name
-            courseEditForm.querySelector("#edit_course_fee").value = json.fee
-            editDrawer.show();
-            //2 show old value
-            //3 changes update
-
-        })
+       editRow(event.target.closest("tr").getAttribute("course-id"))
 
     }
 };

@@ -1,6 +1,6 @@
 import Swal from "sweetalert2";
 import { basedUrl } from "./configs";
-import { rowGroup, rowTemplate } from "./selectors"
+import { editDrawer, rowGroup, rowTemplate } from "./selectors"
 
 export const rowUi = ({id,title,short_name,fee}) => {
     const row = rowTemplate.content.cloneNode(true);
@@ -41,4 +41,61 @@ export const toast = (message, icon="success") => {
         icon,
         title: message
       });
+}
+
+
+export const confirmBox = (approve, title= "Are you sure?",
+text= "You won't be able to revert this!",
+icon= "warning", confirmButtonText= "Confirm") => {
+  Swal.fire({
+    title,
+    text,
+    icon,
+    showCancelButton: true,
+    confirmButtonText,
+}).then((result) => {
+    if (result.isConfirmed) {
+
+       approve();
+    }
+});
+  
+}
+
+
+
+export const removeRow = async (id) => {
+
+  const currentRow = document.querySelector(`tr[course-id='${id}']`);
+
+  confirmBox( async () => {
+    currentRow.querySelector(".row-del").toggleAttribute("disabled");
+
+
+    const res = await fetch(url("/courses/" + id), {
+        method: "DELETE"});
+        currentRow.querySelector(".row-del").toggleAttribute("disabled");
+
+        if (res.status === 204) {
+            toast("Course Deleted")
+            currentRow.remove();
+        }
+
+   })
+  
+}
+
+export const editRow = async (id) => {
+  const currentRow = document.querySelector(`tr[course-id='${id}']`);
+  // 1old value retrieve 
+  currentRow.querySelector(".row-edit").toggleAttribute("disabled");
+
+ const res = await fetch(url("/courses/" + id));
+ const json =await res.json();
+ currentRow.querySelector(".row-edit").toggleAttribute("disabled");
+ courseEditForm.querySelector("#edit_course_title").value = json.title
+ courseEditForm.querySelector("#edit_course_id").value = json.id
+ courseEditForm.querySelector("#edit_short_name").value = json.short_name
+ courseEditForm.querySelector("#edit_course_fee").value = json.fee
+ editDrawer.show();
 }
